@@ -62,7 +62,9 @@ using namespace libtest;
 #include <stdexcept>
 
 #ifndef __USE_GNU
-static char **environ= NULL;
+static char **environment = NULL;
+#else
+static char **environment = environ;
 #endif
 
 #ifndef FD_CLOEXEC
@@ -248,7 +250,7 @@ Application::error_t Application::run(const char *args[])
         const_cast<char *>(_exectuble_with_path.c_str()), 
         0};
 
-      spawn_ret= posix_spawnp(&_pid, libtool(), &file_actions, &spawnattr, argv, environ);
+      spawn_ret= posix_spawnp(&_pid, libtool(), &file_actions, &spawnattr, argv, environment);
     }
     else
     {
@@ -261,7 +263,7 @@ Application::error_t Application::run(const char *args[])
         const_cast<char *>(gdb_run_file.c_str()), 
         const_cast<char *>(_exectuble_with_path.c_str()), 
         0};
-      spawn_ret= posix_spawnp(&_pid, "gdb", &file_actions, &spawnattr, argv, environ);
+      spawn_ret= posix_spawnp(&_pid, "gdb", &file_actions, &spawnattr, argv, environment);
     }
   }
   else
